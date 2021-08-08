@@ -15,7 +15,7 @@ export const DISHES=
           category: 'appetizer',
           label:'',
           price:'1.99',
-          description:'Deep fried Zucchini coated with mildly spiced Chickpea flour batter accompanied with a sweet-tangy tamarind sauce'                        },
+          description:'Deep fried Zucchini coated with mildly spiced Chickpea flour batter accompanied with a sweet-tangy tamarind sauce '},
        {
           id: 2,
           name:'Vadonut',
