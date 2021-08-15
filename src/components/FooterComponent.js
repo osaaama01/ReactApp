@@ -40,7 +40,7 @@ function Footer(props) {
               <a href="mailto:confusion@food.net">confusion@food.net</a>
             </address>
           </div>
-          <div className="col-12 col-sm-4 align-self-center">
+          <div className="col-12 col-sm-4 align-self-center mt-2 mt-sm-0">
             <div className="text-center">
               <a
                 className="btn btn-social-icon btn-google"
