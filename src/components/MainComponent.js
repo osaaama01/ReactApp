@@ -6,6 +6,7 @@ import { PROMOTIONS } from "../shared/promotions";
 import { LEADERS } from "../shared/leaders";
 import Menu from "./MenuComponent";
 import Home from "./HomeComponent";
+import About from "./AboutComponent";
 import DishDetail from "./DishdetailComponent";
 import Contact from "./ContactComponent";
 import Footer from "./FooterComponent";
@@ -49,11 +50,16 @@ class Main extends Component {
       );
     };
 
+    const AboutPage = () => {
+      return <About leaders={this.state.leaders} />;
+    };
+
     return (
       <div>
         <Header />
         <Switch>
           <Route path="/home" component={HomePage} />
+          <Route path="/aboutus" component={AboutPage} />
           <Route
             exact
             path="/menu"
