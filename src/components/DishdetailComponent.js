@@ -17,6 +17,7 @@ import {
 import { Link } from "react-router-dom";
 import "../DishDetail.css";
 import { LocalForm, Control, Errors } from "react-redux-form";
+import { Loading } from './LoadingComponent';
 
 const required = (value) => value && value.length;
 const maxLength = (max) => (value) => !value || value.length <= max;
@@ -149,15 +150,33 @@ function RenderComments({ comments, addComment, dishId }) {
   } else return <div></div>;
 }
 
-function RenderDish({ dish }) {
-  if (dish != null) {
+function RenderDish(props) {
+  if (props.isLoading) {
+    return(
+        <div className="container">
+            <div className="row">            
+                <Loading />
+            </div>
+        </div>
+    );
+  }
+  else if (props.errMess) {
+    return(
+        <div className="container">
+            <div className="row">            
+                <h4>{props.errMess}</h4>
+            </div>
+        </div>
+    );
+  }
+  else if (props.dish != null)  {
     return (
       <React.Fragment>
         <Card>
-          <CardImg top src={dish.image} alt={dish.name} />
+          <CardImg top src={props.dish.image} alt={props.dish.name} />
           <CardBody>
-            <CardTitle>{dish.name}</CardTitle>
-            <CardText>{dish.description}</CardText>
+            <CardTitle>{props.dish.name}</CardTitle>
+            <CardText>{props.dish.description}</CardText>
           </CardBody>
         </Card>
       </React.Fragment>
@@ -182,7 +201,7 @@ const DishDetail = (props) => {
       </div>
       <div className="row">
         <div className="col-12 col-md-5 m-1">
-          <RenderDish dish={props.dish} />
+          <RenderDish dish={props.dish} isLoading = {props.isLoading} errMess={props.errMess} />
         </div>
         <div className="col-12 col-md-5 m-1">
           <RenderComments comments={props.comments} addComment={props.addComment} dishId = {props.dish.id}/>
