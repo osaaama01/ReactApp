@@ -17,6 +17,7 @@ import {
 import { Link } from "react-router-dom";
 import "../DishDetail.css";
 import { LocalForm, Control, Errors } from "react-redux-form";
+import { Loading } from './LoadingComponent';
 
 const required = (value) => value && value.length;
 const maxLength = (max) => (value) => !value || value.length <= max;
@@ -36,8 +37,7 @@ class CommentForm extends Component {
   }
 
   handleSubmit = (values) => {
-    console.log("Current State is: " + JSON.stringify(values));
-    alert("Current State is: " + JSON.stringify(values));
+    this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
   };
 
   render() {
@@ -57,9 +57,9 @@ class CommentForm extends Component {
               <Row className="form-group">
                 <Col>
                   <Control.select
-                    model=".commentRating"
-                    name="commentRating"
-                    id="commentRating"
+                    model=".rating"
+                    name="rating"
+                    id="rating"
                     className="form-control"
                     defaultValue={1}
                   >
@@ -75,9 +75,9 @@ class CommentForm extends Component {
               <Row className="form-group">
                 <Col>
                   <Control.text
-                    model=".commentName"
-                    id="commentName"
-                    name="commentName"
+                    model=".author"
+                    id="author"
+                    name="author"
                     placeholder="Name"
                     className="form-control"
                     validators={{
@@ -124,7 +124,7 @@ class CommentForm extends Component {
   }
 }
 
-function RenderComments({ comments }) {
+function RenderComments({ comments, addComment, dishId }) {
   if (comments != null) {
     return (
       <div>
@@ -144,20 +144,39 @@ function RenderComments({ comments }) {
             </ul>
           );
         })}
+        <CommentForm dishId={dishId} addComment={addComment}/>
       </div>
     );
   } else return <div></div>;
 }
 
-function RenderDish({ dish }) {
-  if (dish != null) {
+function RenderDish(props) {
+  if (props.isLoading) {
+    return(
+        <div className="container">
+            <div className="row">            
+                <Loading />
+            </div>
+        </div>
+    );
+  }
+  else if (props.errMess) {
+    return(
+        <div className="container">
+            <div className="row">            
+                <h4>{props.errMess}</h4>
+            </div>
+        </div>
+    );
+  }
+  else if (props.dish != null)  {
     return (
       <React.Fragment>
         <Card>
-          <CardImg top src={dish.image} alt={dish.name} />
+          <CardImg top src={props.dish.image} alt={props.dish.name} />
           <CardBody>
-            <CardTitle>{dish.name}</CardTitle>
-            <CardText>{dish.description}</CardText>
+            <CardTitle>{props.dish.name}</CardTitle>
+            <CardText>{props.dish.description}</CardText>
           </CardBody>
         </Card>
       </React.Fragment>
@@ -182,11 +201,10 @@ const DishDetail = (props) => {
       </div>
       <div className="row">
         <div className="col-12 col-md-5 m-1">
-          <RenderDish dish={props.dish} />
+          <RenderDish dish={props.dish} isLoading = {props.isLoading} errMess={props.errMess} />
         </div>
         <div className="col-12 col-md-5 m-1">
-          <RenderComments comments={props.comments} />
-          <CommentForm />
+          <RenderComments comments={props.comments} addComment={props.addComment} dishId = {props.dish.id}/>
         </div>
       </div>
     </div>

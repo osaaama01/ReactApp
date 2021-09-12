@@ -8,6 +8,7 @@ import {
   Breadcrumb,
   BreadcrumbItem,
 } from "reactstrap";
+import { Loading } from './LoadingComponent';
 
 function RenderMenuItem({ dish }) {
   return (
@@ -22,15 +23,37 @@ function RenderMenuItem({ dish }) {
   );
 }
 
-const Menu = ({ dishes, onDishSelect }) => {
-  const menu = dishes.map((dish) => {
+const Menu = (props) => {
+  const menu = props.dishes.dishes.map((dish) => {
     return (
       <div key={dish.id} className="col-12 col-md-5 m-1">
-        <RenderMenuItem dish={dish} onDishSelect={onDishSelect} />
+        <RenderMenuItem dish={dish} onDishSelect={props.onDishSelect} />
       </div>
     );
   });
 
+  if (props.dishes.isLoading) {
+    return(
+        <div className="container">
+            <div className="row">            
+                <Loading />
+            </div>
+        </div>
+    );
+}
+else if (props.dishes.errMess) {
+    return(
+        <div className="container">
+            <div className="row"> 
+                <div className="col-12">
+                    <h4>{props.dishes.errMess}</h4>
+                </div>
+            </div>
+        </div>
+    );
+}
+else
+{
   return (
     <div className="container">
       <div className="row">
@@ -49,5 +72,6 @@ const Menu = ({ dishes, onDishSelect }) => {
     </div>
   );
 };
+}
 
 export default Menu;
