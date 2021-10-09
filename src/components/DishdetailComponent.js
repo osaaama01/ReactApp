@@ -17,7 +17,8 @@ import {
 import { Link } from "react-router-dom";
 import "../DishDetail.css";
 import { LocalForm, Control, Errors } from "react-redux-form";
-import { Loading } from './LoadingComponent';
+import { Loading } from "./LoadingComponent";
+import { baseUrl } from "../shared/baseUrl";
 
 const required = (value) => value && value.length;
 const maxLength = (max) => (value) => !value || value.length <= max;
@@ -37,7 +38,12 @@ class CommentForm extends Component {
   }
 
   handleSubmit = (values) => {
-    this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
+    this.props.addComment(
+      this.props.dishId,
+      values.rating,
+      values.author,
+      values.comment
+    );
   };
 
   render() {
@@ -144,7 +150,7 @@ function RenderComments({ comments, addComment, dishId }) {
             </ul>
           );
         })}
-        <CommentForm dishId={dishId} addComment={addComment}/>
+        <CommentForm dishId={dishId} addComment={addComment} />
       </div>
     );
   } else return <div></div>;
@@ -152,28 +158,26 @@ function RenderComments({ comments, addComment, dishId }) {
 
 function RenderDish(props) {
   if (props.isLoading) {
-    return(
-        <div className="container">
-            <div className="row">            
-                <Loading />
-            </div>
+    return (
+      <div className="container">
+        <div className="row">
+          <Loading />
         </div>
+      </div>
     );
-  }
-  else if (props.errMess) {
-    return(
-        <div className="container">
-            <div className="row">            
-                <h4>{props.errMess}</h4>
-            </div>
+  } else if (props.errMess) {
+    return (
+      <div className="container">
+        <div className="row">
+          <h4>{props.errMess}</h4>
         </div>
+      </div>
     );
-  }
-  else if (props.dish != null)  {
+  } else if (props.dish != null) {
     return (
       <React.Fragment>
         <Card>
-          <CardImg top src={props.dish.image} alt={props.dish.name} />
+          <CardImg top src={baseUrl + props.dish.image} alt={props.dish.name} />
           <CardBody>
             <CardTitle>{props.dish.name}</CardTitle>
             <CardText>{props.dish.description}</CardText>
@@ -201,10 +205,18 @@ const DishDetail = (props) => {
       </div>
       <div className="row">
         <div className="col-12 col-md-5 m-1">
-          <RenderDish dish={props.dish} isLoading = {props.isLoading} errMess={props.errMess} />
+          <RenderDish
+            dish={props.dish}
+            isLoading={props.isLoading}
+            errMess={props.errMess}
+          />
         </div>
         <div className="col-12 col-md-5 m-1">
-          <RenderComments comments={props.comments} addComment={props.addComment} dishId = {props.dish.id}/>
+          <RenderComments
+            comments={props.comments}
+            addComment={props.addComment}
+            dishId={props.dish.id}
+          />
         </div>
       </div>
     </div>
